@@ -1,6 +1,6 @@
 # ProgettoArchitetturaDati2024
 
-Questo repository contiene due implementazioni di **Cassandra** e **Elastic Search** per analizzare le performance dei loro indici.
+Questo repository contiene due implementazioni di **Cassandra** e **Elastic Search** per analizzare le performance dei loro indici distribuiti.
 
 ## Istruzioni per l'Esecuzione
 
