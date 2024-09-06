@@ -1,7 +1,7 @@
 services:
   jupyter:
     image: jupyter/base-notebook:latest
-    container_name: lecture_jupyter
+    container_name: jupyter
     environment:
       JUPYTER_ENABLE_LAB: "yes"
       JUPYTER_TOKEN: "token"
@@ -15,7 +15,7 @@ services:
     depends_on:
       - elasticsearch
       - elasticsearch2
-
+      - elasticsearch3
   elasticsearch:
     image: elasticsearch:7.17.0
     container_name: lecture_elasticsearch
@@ -23,15 +23,18 @@ services:
     environment:
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
-      - "discovery.type=single-node"
       - xpack.security.enabled=false
       - http.cors.allow-origin="*"
       - ELASTIC_USERNAME=progettoArchi
       - ELASTIC_PASSWORD=progettoArchi
+      - node.name=elasticsearch
+      - cluster.name=my-cluster
+      - discovery.seed_hosts=elasticsearch,elasticsearch2,elasticsearch3
+      - cluster.initial_master_nodes=elasticsearch
     ports:
       - "9200:9200"
     volumes:
-      - ./elastic-data:/var/lib/elasticsearch/data
+      - ./elastic-data:/usr/share/elasticsearch/data
 
   elasticsearch2:
     image: elasticsearch:7.17.0
@@ -40,37 +43,42 @@ services:
     environment:
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
-      - "discovery.type=single-node"
       - xpack.security.enabled=false
       - http.cors.allow-origin="*"
       - ELASTIC_USERNAME=progettoArchi
       - ELASTIC_PASSWORD=progettoArchi
+      - node.name=elasticsearch2
+      - cluster.name=my-cluster
+      - discovery.seed_hosts=elasticsearch,elasticsearch2,elasticsearch3
+      - cluster.initial_master_nodes=elasticsearch
     ports:
       - "9201:9200"
     volumes:
-      - ./elastic-data2:/var/lib/elasticsearch/data
-
-  kibana:
-    image: kibana:7.17.0
-    container_name: lecture_kibana
-    environment:
-      - XPACK_MONITORING_ENABLED=false
-      - XPACK_SECURITY_ENABLED=false
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200,http://elasticsearch2:9200
-      - ELASTICSEARCH_USERNAME=progettoArchi
-      - ELASTIC_PASSWORD=progettoArchi
-    restart: always
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch
-      - elasticsearch2
-  
+      - ./elastic-data2:/usr/share/elasticsearch/data
+  elasticsearch3:
+      image: elasticsearch:7.17.0
+      container_name: lecture_elasticsearch2
+      restart: always
+      environment:
+        - bootstrap.memory_lock=true
+        - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
+        - xpack.security.enabled=false
+        - http.cors.allow-origin="*"
+        - ELASTIC_USERNAME=progettoArchi
+        - ELASTIC_PASSWORD=progettoArchi
+        - node.name=elasticsearch3
+        - cluster.name=my-cluster
+        - discovery.seed_hosts=elasticsearch,elasticsearch2,elasticsearch3
+        - cluster.initial_master_nodes=elasticsearch
+      ports:
+        - "9202:9200"
+      volumes:
+        - ./elastic-data3:/usr/share/elasticsearch3/data
   st-agent:
     image: sematext/agent:latest
     privileged: true
     environment:
-      - INFRA_TOKEN=d317b4df-b7ac-40e4-bd4a-58607294c62c
+      - INFRA_TOKEN=6774cc74-94ed-4ab1-acbd-55babf00d66a
       - REGION=EU
     cap_add:
       - SYS_ADMIN
@@ -84,3 +92,5 @@ services:
       - /sys:/host/sys:ro
       - /dev:/hostfs/dev:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    
+
