@@ -29,6 +29,8 @@ Questo repository contiene due implementazioni di **Cassandra** e **Elastic Sear
 6. **Esegui il Programma**:
    - All'interno di Jupyter Notebook, esegui i notebook o i file Python inclusi per analizzare le performance e testare le implementazioni.
 
+## Note
+All'interno del docker-compose è presente un servizio chiamato st-agent che permette di inviare le metriche del programma dal docker ad una web app esterna che ne gestisce e facilità la visualizzazione.
 ## Autori
 
 Questo progetto è stato realizzato da:
