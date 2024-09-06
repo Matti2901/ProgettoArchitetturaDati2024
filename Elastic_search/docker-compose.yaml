@@ -57,7 +57,7 @@ services:
       - ./elastic-data2:/usr/share/elasticsearch/data
   elasticsearch3:
       image: elasticsearch:7.17.0
-      container_name: lecture_elasticsearch2
+      container_name: lecture_elasticsearch3
       restart: always
       environment:
         - bootstrap.memory_lock=true
