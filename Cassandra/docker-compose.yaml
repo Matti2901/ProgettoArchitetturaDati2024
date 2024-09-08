@@ -30,20 +30,6 @@ services:
       - cassandra-data2:/var/lib/cassandra
     networks:
       - cassandra
-  cassandra3:
-    image: cassandra:latest
-    container_name: cassandra-container3
-    ports:
-      - "9044:9042"
-    environment:
-      - CASSANDRA_CLUSTER_NAME=MyCluster
-      - CASSANDRA_LISTENER_PORT=7000
-      - CASSANDRA_RPC_PORT=9042
-      - CASSANDRA_SEEDS=cassandra-container1
-    volumes:
-      - cassandra-data3:/var/lib/cassandra
-    networks:
-      - cassandra
   jupyter:
     image: jupyter/base-notebook:latest
     container_name: lecture_jupyter
@@ -60,7 +46,6 @@ services:
     depends_on:
       - cassandra1
       - cassandra2
-      - cassandra3
     networks:
       - cassandra
   st-agent:
@@ -85,7 +70,6 @@ services:
 volumes:
   cassandra-data1:
   cassandra-data2:
-  cassandra-data3:
 
 networks:
   cassandra:
